@@ -79,28 +79,30 @@ export function Sidebar({ collapsed }: SidebarProps) {
           />
           {!collapsed && <span>Talinf</span>}
         </Link>
-        <Link
-          href="/docs"
-          className={cn(
-            "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
-            pathname.startsWith("/docs")
-              ? "bg-blue-50 text-blue-700"
-              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
-            collapsed && "justify-center px-0"
-          )}
-          title="Developer Docs"
-        >
-          <BookOpen
+        {process.env.NODE_ENV !== 'production' && (
+          <Link
+            href="/docs"
             className={cn(
-              "w-5 h-5 shrink-0 transition-colors",
-              !collapsed && "mr-3",
+              "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
               pathname.startsWith("/docs")
-                ? "text-blue-600"
-                : "text-slate-400 group-hover:text-slate-600"
+                ? "bg-blue-50 text-blue-700"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+              collapsed && "justify-center px-0"
             )}
-          />
-          {!collapsed && <span>Developer Docs</span>}
-        </Link>
+            title="Developer Docs"
+          >
+            <BookOpen
+              className={cn(
+                "w-5 h-5 shrink-0 transition-colors",
+                !collapsed && "mr-3",
+                pathname.startsWith("/docs")
+                  ? "text-blue-600"
+                  : "text-slate-400 group-hover:text-slate-600"
+              )}
+            />
+            {!collapsed && <span>Developer Docs</span>}
+          </Link>
+        )}
       </nav>
 
       {/* Footer Area */}
