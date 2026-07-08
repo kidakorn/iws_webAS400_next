@@ -141,6 +141,46 @@ export async function fetchInventory(code: string) {
             </Card>
           </section>
 
+          {/* Section 4: Deployment Workflow */}
+          <section>
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center mb-4">
+              <Terminal className="w-5 h-5 mr-2 text-blue-500" />
+              4. วิธีนำโค้ดไปทำต่อและการ Deploy (Deployment Workflow)
+            </h2>
+            <Card className="p-6 bg-white border-slate-200">
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-slate-800">1. การ Clone โค้ดไปทำต่อที่เครื่องอื่น (เช่น ที่ทำงาน)</h3>
+                  <p className="text-sm text-slate-600">รันคำสั่งใน Terminal ตามลำดับดังนี้:</p>
+                  <pre className="bg-slate-800 text-slate-50 p-4 rounded-lg text-[13px] font-mono leading-relaxed overflow-x-auto">
+                    <code>{`git clone https://github.com/kidakorn/iws_webAS400_next.git
+cd iws_webAS400_next
+npm install`}</code>
+                  </pre>
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-slate-800">2. ตั้งค่าไฟล์ Environment</h3>
+                  <p className="text-sm text-slate-600">เนื่องจากไฟล์ <code className="bg-slate-100 px-1 rounded text-slate-700">.env.production</code> จะไม่ถูกฝังขึ้น GitHub (เพื่อความปลอดภัย) คุณต้องสร้างใหม่เองที่ทำงาน:</p>
+                  <pre className="bg-slate-50 border border-slate-100 p-4 rounded-lg text-[13px] text-slate-800 font-mono overflow-x-auto">
+                    <code>{`# สร้างไฟล์ .env.production ในโฟลเดอร์โปรเจกต์
+NEXT_PUBLIC_API_BASE_URL=http://your-office-server/api/web/services`}</code>
+                  </pre>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-slate-800">3. รันคำสั่ง Build เพื่อนำไปใช้จริง</h3>
+                  <p className="text-sm text-slate-600">หลังจากตั้งค่า URL เสร็จ ให้รันคำสั่ง Build:</p>
+                  <pre className="bg-slate-800 text-slate-50 p-4 rounded-lg text-[13px] font-mono overflow-x-auto">
+                    <code>npm run build</code>
+                  </pre>
+                  <p className="text-sm text-slate-600 bg-blue-50/50 p-3 rounded border border-blue-100 mt-3">
+                    <strong>ข้อควรจำ:</strong> เมื่อคำสั่งทำงานเสร็จ ให้เข้าไปที่โฟลเดอร์ <code className="font-mono bg-blue-100 px-1 rounded text-blue-800">out/</code> แล้ว <strong>Copy ของข้างในโฟลเดอร์ทั้งหมดทุกชิ้น</strong> ไปวางทับใน Shared Folder ปลายทางได้เลยครับ
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </section>
         </div>
       </ScrollArea>
     </div>
