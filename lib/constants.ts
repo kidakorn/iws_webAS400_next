@@ -1,0 +1,26 @@
+import { MinpopRecord } from "@/types/minpop";
+import { TalinfRecord } from "@/types/talinf";
+
+export const IWS_CONFIG = {
+  TIMEOUT_MS: 30000,
+  ENDPOINTS: {
+    MINPOP: (empid: string) => `/minpop?empid=${empid}`,
+    TALINF: (lotno: string) => `/talinf?lotno=${lotno}`,
+  },
+};
+
+export const MOCK_MINPOP_DATA: MinpopRecord[] = [
+  { OPERATOR_CODE: "25066", OPERATOR_NAME: "I.KIDAKORN", SHIFT: "Normal" },
+  { OPERATOR_CODE: "10245", OPERATOR_NAME: "R.Suda", SHIFT: "A" },
+  { OPERATOR_CODE: "10246", OPERATOR_NAME: "Y.Anan", SHIFT: "B" },
+  { OPERATOR_CODE: "10247", OPERATOR_NAME: "C.Amnart", SHIFT: "C" },
+  { OPERATOR_CODE: "10248", OPERATOR_NAME: "S.Manee", SHIFT: "Normal" }
+];
+
+export const MOCK_TALINF_DATA: TalinfRecord[] = [
+  { "ASSEMBLY LOT NO.": "05245-0001-421-001", "DEVICE CODE": "100451", "DEVICE NAME": "MAIN ASSEMBLY BOARD", "PROCESS CODE": "301550", "QTY": 500 },
+  { "ASSEMBLY LOT NO.": "05245-0001-421-002", "DEVICE CODE": "100452", "DEVICE NAME": "SUB ASSEMBLY UNIT X2", "PROCESS CODE": "301551", "QTY": 1200 },
+  { "ASSEMBLY LOT NO.": "05245-0001-422-001", "DEVICE CODE": "205510", "DEVICE NAME": "OUTER CASING METAL", "PROCESS CODE": "301560", "QTY": 350 },
+  { "ASSEMBLY LOT NO.": "05245-0001-422-002", "DEVICE CODE": "301102", "DEVICE NAME": "POWER SUPPLY MODULE 500W", "PROCESS CODE": "301565", "QTY": 150 },
+  { "ASSEMBLY LOT NO.": "05245-0002-421-001", "DEVICE CODE": "100451", "DEVICE NAME": "MAIN ASSEMBLY BOARD", "PROCESS CODE": "301550", "QTY": 1000 }
+];
