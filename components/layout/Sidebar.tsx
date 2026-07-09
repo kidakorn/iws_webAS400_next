@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { Users, Box, Database, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -11,6 +13,8 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed }: SidebarProps) {
   const pathname = usePathname();
+  const { operator, login, logout, isLoading } = useAuth();
+  const [loginInput, setLoginInput] = useState("");
 
   return (
     <aside
@@ -105,9 +109,82 @@ export function Sidebar({ collapsed }: SidebarProps) {
         )}
       </nav>
 
+      {/* Auth Area */}
+      <div className="mt-auto border-t border-slate-200 bg-slate-50">
+        {!collapsed ? (
+          <div className="p-4">
+            {operator ? (
+              <div className="flex flex-col space-y-3">
+                <div className="flex items-center space-x-2 text-sm text-slate-700">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold shrink-0">
+                    {operator.name.charAt(0)}
+                  </div>
+                  <div className="flex flex-col overflow-hidden">
+                    <span className="font-semibold truncate">{operator.name}</span>
+                    <span className="text-xs text-slate-500">ID: {operator.empId}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={logout}
+                  className="w-full text-center text-sm py-1.5 text-red-600 hover:bg-red-50 rounded-md transition-colors font-medium border border-transparent hover:border-red-200"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  login(loginInput);
+                }}
+                className="flex flex-col space-y-2"
+              >
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Operator Login
+                </label>
+                <input
+                  type="text"
+                  placeholder="OP Code"
+                  className="w-full text-sm px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={loginInput}
+                  onChange={(e) => setLoginInput(e.target.value)}
+                  disabled={isLoading}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-blue-600 text-white text-sm py-2 rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+                >
+                  {isLoading ? "Logging in..." : "Login"}
+                </button>
+              </form>
+            )}
+          </div>
+        ) : (
+          <div className="py-4 flex justify-center">
+            {operator ? (
+              <div 
+                className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all"
+                title={`Logged in as ${operator.name}. Click to logout.`}
+                onClick={logout}
+              >
+                {operator.name.charAt(0)}
+              </div>
+            ) : (
+              <div 
+                className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 cursor-pointer hover:bg-blue-100 hover:text-blue-600 transition-all"
+                title="Expand to Login"
+              >
+                <Users className="w-4 h-4" />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
       {/* Footer Area */}
-      <div className="p-4 border-t border-slate-200">
-        <div className={cn("text-xs text-slate-400", collapsed && "hidden")}>
+      <div className="p-4 border-t border-slate-200 shrink-0">
+        <div className={cn("text-xs text-slate-400 text-center", collapsed && "hidden")}>
           v2.0.0 (Next.js)
         </div>
       </div>

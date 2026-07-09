@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { QrCode, FileText } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { showQRDialog } from "./QrCodeDialog";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 interface DataTableProps<T> {
   data: T[];
@@ -22,6 +23,8 @@ export function DataTable<T extends Record<string, unknown>>({
   data,
   onViewDetails,
 }: DataTableProps<T>) {
+  const { operator } = useAuth();
+
   if (!data || data.length === 0) {
     return (
       <div className="rounded-md border border-slate-200 bg-white p-8 text-center text-slate-500 italic">
@@ -69,7 +72,13 @@ export function DataTable<T extends Record<string, unknown>>({
                       variant="outline"
                       size="icon"
                       className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-100 border-blue-200"
-                      onClick={() => showQRDialog(row as Record<string, unknown>, "Generate QR Code", getBadgeText(row as Record<string, unknown>), () => onViewDetails(row))}
+                      onClick={() => {
+                        const qrData = { ...row } as Record<string, unknown>;
+                        if (operator) {
+                          qrData["OP_CODE"] = operator.empId;
+                        }
+                        showQRDialog(qrData, "Generate QR Code", getBadgeText(row as Record<string, unknown>), () => onViewDetails(row));
+                      }}
                       title="Generate QR Code"
                     >
                       <QrCode className="h-4 w-4" />
