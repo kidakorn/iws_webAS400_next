@@ -16,8 +16,11 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Webdev AS400",
-  description: "AS400 Operator Code and Assembly Lot Search Tool",
+  title: "Webdev AS400 | Data Portal",
+  description: "ระบบค้นหาข้อมูลพนักงาน (Operator Code) และ Assembly Lot จากฐานข้อมูล AS400 สำหรับสายการผลิต",
+  keywords: ["AS400", "Operator", "Assembly Lot", "Manufacturing", "Search", "Webdev"],
+  authors: [{ name: "Webdev AS400 Team" }],
+  robots: "noindex, nofollow", // Internal tool, shouldn't be indexed by public search engines
 };
 
 export default function RootLayout({
