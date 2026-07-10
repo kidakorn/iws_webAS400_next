@@ -11,8 +11,8 @@ export function validateEmployeeId(value: string): ValidationResult {
     return { valid: false, message: "Please enter numbers only." };
   }
 
-  if (val.length !== 5) {
-    return { valid: false, message: "Operator Code must be exactly 5 digits." };
+  if (val.length > 5) {
+    return { valid: false, message: "Operator Code must not exceed 5 digits." };
   }
 
   return { valid: true, message: "" };

@@ -40,6 +40,7 @@ export function Sidebar({ collapsed }: SidebarProps) {
       <nav className="flex-1 px-4 py-6 space-y-2">
         <Link
           href="/minpop"
+          prefetch={false}
           className={cn(
             "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
             pathname.startsWith("/minpop") || pathname === "/"
@@ -63,6 +64,7 @@ export function Sidebar({ collapsed }: SidebarProps) {
 
         <Link
           href="/talinf"
+          prefetch={false}
           className={cn(
             "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
             pathname.startsWith("/talinf")

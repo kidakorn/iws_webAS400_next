@@ -8,7 +8,7 @@ export function validateLotNo(value: string): ValidationResult {
   }
 
   // format XXXXX-XXXX-XXX-XXX
-  const pattern = /^\d{5}-\d{4}-\d{3}-\d{3}$/;
+  const pattern = /^\d{5}-\d{4}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}$/;
   if (!pattern.test(val)) {
     return { valid: false, message: "Invalid format. Expected: XXXXX-XXXX-XXX-XXX" };
   }

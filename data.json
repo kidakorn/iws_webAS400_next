@@ -1,0 +1,5 @@
+http://as400webappdev/api/web/services/SCANNER/minpop?empid=25066
+{
+"P_EMPNAME": "I.KIDAKORN",
+"P_ISFOUND": "1"
+}
