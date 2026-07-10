@@ -51,9 +51,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data && data.length > 0) {
         // Find the operator record
         const record = data[0];
+        
+        // Handle IWS Schema P_EMPNAME, fallback to OPERATOR_NAME or generic
+        const nameVal = record.P_EMPNAME || record.OPERATOR_NAME || `Operator ${empId.trim()}`;
+        
         const newOperator = {
-          empId: record.OPERATOR_CODE,
-          name: record.OPERATOR_NAME || "Unknown Name",
+          empId: (record.OPERATOR_CODE as string) || empId.trim(),
+          name: String(nameVal),
         };
         setOperator(newOperator);
         localStorage.setItem("iws_operator", JSON.stringify(newOperator));

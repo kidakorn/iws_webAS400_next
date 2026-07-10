@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  trailingSlash: true,
+  trailingSlash: false,
   basePath: '/kidakorn',
 };
 
