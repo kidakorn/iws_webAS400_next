@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { fetchOperatorByEmpId } from "@/lib/api/minpop";
+import { validateEmployeeId } from "@/lib/validators/minpop";
 
 interface Operator {
   empId: string;
@@ -35,11 +36,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (empId: string): Promise<boolean> => {
-    if (!empId || empId.trim() === "") {
+    const validation = validateEmployeeId(empId);
+    if (!validation.valid) {
       Swal.fire({
         icon: "warning",
         title: "Validation Error",
-        text: "Please enter an Operator Code.",
+        text: validation.message,
         confirmButtonColor: "#2563EB",
       });
       return false;

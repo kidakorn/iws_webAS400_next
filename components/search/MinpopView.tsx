@@ -1,12 +1,12 @@
 "use client";
 
-import { useTalinfSearch } from "@/hooks/useTalinfSearch";
+import { useMinpopSearch } from "@/hooks/useMinpopSearch";
 import { SearchCard } from "@/components/SearchCard";
 import { DataTable } from "@/components/DataTable";
 import { DetailDrawer } from "@/components/DetailDrawer";
 import { StatusBadge } from "@/components/StatusBadge";
 
-export default function TalinfPage() {
+export function MinpopView() {
   const {
     searchTerm,
     setSearchTerm,
@@ -18,20 +18,20 @@ export default function TalinfPage() {
     handleRowSelect,
     validationError,
     loadMockData,
-  } = useTalinfSearch();
+  } = useMinpopSearch();
 
   return (
     <div className="max-w-5xl mx-auto animate-in fade-in duration-500">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Talinf Search</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Operator Code Search</h1>
         <StatusBadge status={searchState.status} />
       </div>
 
       <SearchCard
-        label="Search ID (Talinf)"
-        placeholder="e.g. 05245-0001-421-001"
-        maxLength={18}
-        inputMode="text"
+        label="Employee ID (OP Code)"
+        placeholder="e.g. 25066"
+        maxLength={5}
+        inputMode="numeric"
         value={searchTerm}
         onChange={setSearchTerm}
         onSearch={handleSearch}

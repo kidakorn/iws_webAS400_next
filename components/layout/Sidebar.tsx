@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Users, Box, Database, BookOpen } from "lucide-react";
+import { Users, Box, Database, BookOpen, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/AuthProvider";
 
@@ -13,6 +13,8 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed }: SidebarProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("tab") || "dashboard";
   const { operator, login, logout, isLoading } = useAuth();
   const [loginInput, setLoginInput] = useState("");
 
@@ -39,11 +41,35 @@ export function Sidebar({ collapsed }: SidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-2">
         <Link
-          href="/minpop"
+          href="/?tab=dashboard"
           prefetch={false}
           className={cn(
             "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
-            pathname.startsWith("/minpop") || pathname === "/"
+            currentTab === "dashboard"
+              ? "bg-blue-50 text-blue-700"
+              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+            collapsed && "justify-center px-0"
+          )}
+          title="Dashboard"
+        >
+          <LayoutDashboard
+            className={cn(
+              "w-5 h-5 shrink-0 transition-colors",
+              !collapsed && "mr-3",
+              currentTab === "dashboard"
+                ? "text-blue-600"
+                : "text-slate-400 group-hover:text-slate-600"
+            )}
+          />
+          {!collapsed && <span>Dashboard</span>}
+        </Link>
+
+        <Link
+          href="/?tab=minpop"
+          prefetch={false}
+          className={cn(
+            "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
+            currentTab === "minpop"
               ? "bg-blue-50 text-blue-700"
               : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
             collapsed && "justify-center px-0"
@@ -54,7 +80,7 @@ export function Sidebar({ collapsed }: SidebarProps) {
             className={cn(
               "w-5 h-5 shrink-0 transition-colors",
               !collapsed && "mr-3",
-              pathname.startsWith("/minpop") || pathname === "/"
+              currentTab === "minpop"
                 ? "text-blue-600"
                 : "text-slate-400 group-hover:text-slate-600"
             )}
@@ -63,11 +89,11 @@ export function Sidebar({ collapsed }: SidebarProps) {
         </Link>
 
         <Link
-          href="/talinf"
+          href="/?tab=talinf"
           prefetch={false}
           className={cn(
             "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
-            pathname.startsWith("/talinf")
+            currentTab === "talinf"
               ? "bg-blue-50 text-blue-700"
               : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
             collapsed && "justify-center px-0"
@@ -78,7 +104,7 @@ export function Sidebar({ collapsed }: SidebarProps) {
             className={cn(
               "w-5 h-5 shrink-0 transition-colors",
               !collapsed && "mr-3",
-              pathname.startsWith("/talinf")
+              currentTab === "talinf"
                 ? "text-blue-600"
                 : "text-slate-400 group-hover:text-slate-600"
             )}
@@ -146,6 +172,8 @@ export function Sidebar({ collapsed }: SidebarProps) {
                 </label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  maxLength={5}
                   placeholder="OP Code"
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={loginInput}
