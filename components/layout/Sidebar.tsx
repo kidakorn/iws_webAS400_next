@@ -98,7 +98,7 @@ export function Sidebar({ collapsed }: SidebarProps) {
               : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
             collapsed && "justify-center px-0"
           )}
-          title="Talinf"
+          title="Lot Information"
         >
           <Box
             className={cn(

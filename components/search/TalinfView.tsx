@@ -28,7 +28,7 @@ export function TalinfView() {
       </div>
 
       <SearchCard
-        label="Search ID (Talinf)"
+        label="Search ID (Lot Information)"
         placeholder="e.g. 05245-0001-421-001"
         maxLength={18}
         inputMode="text"
