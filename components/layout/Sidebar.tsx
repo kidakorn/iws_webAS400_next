@@ -109,7 +109,7 @@ export function Sidebar({ collapsed }: SidebarProps) {
                 : "text-slate-400 group-hover:text-slate-600"
             )}
           />
-          {!collapsed && <span>Talinf</span>}
+          {!collapsed && <span>Lot Information</span>}
         </Link>
         {process.env.NODE_ENV !== 'production' && (
           <Link

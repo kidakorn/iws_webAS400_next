@@ -25,7 +25,7 @@ export function SearchTabs() {
         <TabsList className="grid w-full grid-cols-3 max-w-2xl mx-auto mb-8">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="minpop">Operator Code (Minpop)</TabsTrigger>
-          <TabsTrigger value="talinf">Talinf</TabsTrigger>
+          <TabsTrigger value="talinf">Lot Information (Talinf)</TabsTrigger>
         </TabsList>
         <TabsContent value="dashboard" className="mt-0">
           <DashboardView />
