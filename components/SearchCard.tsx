@@ -38,22 +38,21 @@ export function SearchCard({
   };
 
   return (
-    <Card className="p-5 md:p-6 mb-6 shadow-sm border-slate-200">
+    <div className="bg-white p-5 md:p-6 mb-6 shadow-sm border border-slate-200 rounded-sm border-t-4 border-t-blue-600">
       <div className="flex flex-col md:flex-row items-start md:items-end gap-4">
         <div className="w-full md:w-72 relative">
           <label className="block text-sm font-semibold text-slate-700 mb-1.5">
             {label}
           </label>
-          <Input
+          <input
             type="text"
-            className={`font-mono ${error ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+            className={`w-full px-3 py-2 bg-white border border-slate-200 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium text-sm text-slate-700 ${error ? "border-red-500 focus:ring-red-500 focus:border-red-500" : ""}`}
             placeholder={placeholder}
             maxLength={maxLength}
             inputMode={inputMode}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
-            autoComplete="off"
             disabled={isLoading}
           />
           {error && (
@@ -63,28 +62,27 @@ export function SearchCard({
           )}
         </div>
         <div className="flex gap-2 w-full md:w-auto">
-          <Button
+          <button
             onClick={onSearch}
-            disabled={isLoading}
-            className="w-full md:w-32 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-all"
+            disabled={isLoading || !value.trim()}
+            className="w-full md:w-32 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium py-2 rounded-sm transition-colors shadow-sm disabled:opacity-50 flex items-center justify-center"
           >
             {isLoading ? (
               <span className="animate-spin mr-2 border-2 border-white/20 border-t-white rounded-full w-4 h-4" />
             ) : null}
-            {isLoading ? "Loading" : "Load Data"}
-          </Button>
+            {isLoading ? "Searching..." : "Search"}
+          </button>
           {onLoadExample && (
-            <Button
-              variant="outline"
+            <button
               onClick={onLoadExample}
               disabled={isLoading}
-              className="w-full md:w-32 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium shadow-sm transition-all border-slate-200"
+              className="w-full md:w-32 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-sm font-medium py-2 rounded-sm shadow-sm transition-colors"
             >
               Mock Data
-            </Button>
+            </button>
           )}
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

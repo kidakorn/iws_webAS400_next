@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Users, Box, Database, BookOpen, LayoutDashboard } from "lucide-react";
+import { Users, Box, Database, BookOpen, LayoutDashboard, QrCode } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/AuthProvider";
+import { showQRDialog } from "@/components/QrCodeDialog";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -44,10 +45,10 @@ export function Sidebar({ collapsed }: SidebarProps) {
           href="/?tab=dashboard"
           prefetch={false}
           className={cn(
-            "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
+            "flex items-center px-3 py-2.5 rounded-sm font-medium transition-all group border-l-4",
             currentTab === "dashboard"
-              ? "bg-blue-50 text-blue-700"
-              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+              ? "bg-slate-50 text-blue-700 border-l-blue-600"
+              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-l-transparent",
             collapsed && "justify-center px-0"
           )}
           title="Dashboard"
@@ -68,10 +69,10 @@ export function Sidebar({ collapsed }: SidebarProps) {
           href="/?tab=minpop"
           prefetch={false}
           className={cn(
-            "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
+            "flex items-center px-3 py-2.5 rounded-sm font-medium transition-all group border-l-4",
             currentTab === "minpop"
-              ? "bg-blue-50 text-blue-700"
-              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+              ? "bg-slate-50 text-blue-700 border-l-blue-600"
+              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-l-transparent",
             collapsed && "justify-center px-0"
           )}
           title="Operator Code"
@@ -92,10 +93,10 @@ export function Sidebar({ collapsed }: SidebarProps) {
           href="/?tab=talinf"
           prefetch={false}
           className={cn(
-            "flex items-center px-3 py-2.5 rounded-md font-medium transition-colors group",
+            "flex items-center px-3 py-2.5 rounded-sm font-medium transition-all group border-l-4",
             currentTab === "talinf"
-              ? "bg-blue-50 text-blue-700"
-              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+              ? "bg-slate-50 text-blue-700 border-l-blue-600"
+              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-l-transparent",
             collapsed && "justify-center px-0"
           )}
           title="Lot Information"
@@ -152,12 +153,29 @@ export function Sidebar({ collapsed }: SidebarProps) {
                     <span className="text-xs text-slate-500">ID: {operator.empId}</span>
                   </div>
                 </div>
-                <button
-                  onClick={logout}
-                  className="w-full text-center text-sm py-1.5 text-red-600 hover:bg-red-50 rounded-md transition-colors font-medium border border-transparent hover:border-red-200"
-                >
-                  Logout
-                </button>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => {
+                      showQRDialog(
+                        { empid: operator.empId, name: operator.name },
+                        "My Operator QR",
+                        `OP Code: ${operator.empId}`,
+                        () => {} // no-op for details
+                      );
+                    }}
+                    className="flex-1 flex items-center justify-center text-sm py-1.5 text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-sm transition-colors font-medium border border-blue-200"
+                    title="My QR Code"
+                  >
+                    <QrCode className="w-4 h-4 mr-2" />
+                    My QR
+                  </button>
+                  <button
+                    onClick={logout}
+                    className="flex-1 text-center text-sm py-1.5 text-red-600 hover:bg-red-50 rounded-sm transition-colors font-medium border border-transparent hover:border-red-200"
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
             ) : (
               <form 
@@ -167,23 +185,24 @@ export function Sidebar({ collapsed }: SidebarProps) {
                 }}
                 className="flex flex-col space-y-2"
               >
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                  Operator Login
-                </label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={5}
-                  placeholder="OP Code"
-                  className="w-full text-sm px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={loginInput}
-                  onChange={(e) => setLoginInput(e.target.value)}
-                  disabled={isLoading}
-                />
+                <div className="relative">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    Operator Login
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="OP Code (e.g. 25066)"
+                    value={loginInput}
+                    onChange={(e) => setLoginInput(e.target.value)}
+                    className="w-full pl-3 pr-3 py-2 mt-1 bg-white border border-slate-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    disabled={isLoading}
+                  />
+                </div>
+                
                 <button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-blue-600 text-white text-sm py-2 rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+                  disabled={isLoading || !loginInput.trim()}
+                  className="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded-sm transition-colors disabled:opacity-50 text-sm"
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </button>

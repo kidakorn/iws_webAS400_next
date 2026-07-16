@@ -1,49 +1,48 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
-import { ReactNode } from "react";
+import React from "react";
+import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StatCardProps {
   title: string;
   value: string;
-  description?: string;
-  icon: ReactNode;
+  icon: React.ReactNode;
   trend?: "up" | "down" | "neutral";
   trendValue?: string;
+  description?: string;
 }
 
-export function StatCard({ title, value, description, icon, trend, trendValue }: StatCardProps) {
+export function StatCard({ title, value, icon, trend, trendValue, description }: StatCardProps) {
   return (
-    <Card className="p-6 bg-white border-slate-200 shadow-sm relative overflow-hidden group hover:border-blue-200 transition-colors">
-      <div className="flex justify-between items-start mb-4 relative z-10">
-        <div>
-          <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
-          <h3 className="text-2xl font-bold text-slate-800">{value}</h3>
-        </div>
-        <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+    <div className="bg-white p-5 rounded-sm border border-slate-200 shadow-sm relative overflow-hidden flex flex-col justify-between border-t-4 border-t-slate-800">
+      <div className="flex justify-between items-start mb-4">
+        <div className="text-slate-500 font-medium text-sm z-10">{title}</div>
+        <div className="w-10 h-10 bg-slate-50 rounded-sm flex items-center justify-center text-slate-700 z-10 border border-slate-100">
           {icon}
         </div>
       </div>
-      
-      {(description || trendValue) && (
-        <div className="flex items-center text-sm relative z-10 mt-4 pt-4 border-t border-slate-100">
-          {trendValue && (
-            <span
-              className={cn(
-                "font-medium mr-2",
-                trend === "up" ? "text-emerald-600" : trend === "down" ? "text-rose-600" : "text-slate-600"
-              )}
-            >
-              {trend === "up" ? "↑" : trend === "down" ? "↓" : "−"} {trendValue}
-            </span>
-          )}
-          {description && <span className="text-slate-500">{description}</span>}
-        </div>
-      )}
-      
-      {/* Decorative background element */}
-      <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-slate-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500 z-0"></div>
-    </Card>
+      <div className="z-10">
+        <h3 className="text-2xl font-bold text-slate-800 mb-1">{value}</h3>
+        
+        {(trend || description) && (
+          <div className="flex items-center text-sm">
+            {trend && (
+              <span className={cn(
+                "flex items-center font-medium mr-2",
+                trend === "up" ? "text-emerald-600" : 
+                trend === "down" ? "text-rose-600" : "text-slate-500"
+              )}>
+                {trend === "up" && <TrendingUp className="w-3 h-3 mr-1" />}
+                {trend === "down" && <TrendingDown className="w-3 h-3 mr-1" />}
+                {trend === "neutral" && <Minus className="w-3 h-3 mr-1" />}
+                {trendValue}
+              </span>
+            )}
+            {description && <span className="text-slate-400 text-xs">{description}</span>}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

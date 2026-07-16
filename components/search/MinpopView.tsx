@@ -44,14 +44,15 @@ export function MinpopView() {
         <DataTable
           data={searchState.data}
           onViewDetails={handleRowSelect}
+          searchTerm={searchTerm}
         />
       )}
 
       <DetailDrawer
-        open={isDrawerOpen}
-        onOpenChange={setIsDrawerOpen}
-        data={selectedRow as Record<string, unknown> | null}
-        title="Record Details"
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        data={selectedRow}
+        title="Operator Details"
       />
     </div>
   );

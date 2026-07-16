@@ -1,17 +1,16 @@
+import { z } from "zod";
 import { ValidationResult } from "@/types/api";
 
+export const LotNoSchema = z.string()
+  .trim()
+  .min(1, "Lot No is required.")
+  .regex(/^\d{5}-\d{4}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}$/, "Invalid format. Expected: XXXXX-XXXX-XXX-XXX");
+
 export function validateLotNo(value: string): ValidationResult {
-  const val = value.trim();
-
-  if (!val) {
-    return { valid: false, message: "Lot No is required." };
+  const result = LotNoSchema.safeParse(value);
+  if (result.success) {
+    return { valid: true, message: "" };
+  } else {
+    return { valid: false, message: result.error.issues[0].message };
   }
-
-  // format XXXXX-XXXX-XXX-XXX
-  const pattern = /^\d{5}-\d{4}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}$/;
-  if (!pattern.test(val)) {
-    return { valid: false, message: "Invalid format. Expected: XXXXX-XXXX-XXX-XXX" };
-  }
-
-  return { valid: true, message: "" };
 }

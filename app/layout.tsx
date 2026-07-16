@@ -3,6 +3,8 @@ import { Inter, IBM_Plex_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppShell } from "@/components/layout/AppShell";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { Toaster } from "sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
   description: "ระบบค้นหาข้อมูลพนักงาน (Operator Code) และ Assembly Lot จากฐานข้อมูล AS400 สำหรับสายการผลิต",
   keywords: ["AS400", "Operator", "Assembly Lot", "Manufacturing", "Search", "Webdev"],
   authors: [{ name: "Webdev AS400 Team" }],
-  robots: "noindex, nofollow", // Internal tool, shouldn't be indexed by public search engines
+  robots: "noindex, nofollow",
 };
 
 export default function RootLayout({
@@ -37,7 +39,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <AuthProvider>
           <TooltipProvider>
-            <AppShell>{children}</AppShell>
+            <NuqsAdapter>
+              <AppShell>{children}</AppShell>
+            </NuqsAdapter>
+            <Toaster position="bottom-right" richColors />
           </TooltipProvider>
         </AuthProvider>
       </body>

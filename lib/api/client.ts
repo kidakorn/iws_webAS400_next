@@ -1,6 +1,6 @@
 import { IWS_CONFIG } from "../constants";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api/web/services";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api/web/services/SCANNER";
 
 export async function apiRequest<T>(
   endpoint: string,

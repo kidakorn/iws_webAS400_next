@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import Swal from "sweetalert2";
+import React, { useEffect } from "react";
+import { create } from "zustand";
+import { toast } from "sonner";
 import { fetchOperatorByEmpId } from "@/lib/api/minpop";
 import { validateEmployeeId } from "@/lib/validators/minpop";
 
@@ -10,106 +11,79 @@ interface Operator {
   name: string;
 }
 
-interface AuthContextType {
+interface AuthState {
   operator: Operator | null;
+  isLoading: boolean;
   login: (empId: string) => Promise<boolean>;
   logout: () => void;
-  isLoading: boolean;
+  initialize: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const useAuth = create<AuthState>((set) => ({
+  operator: null,
+  isLoading: false,
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [operator, setOperator] = useState<Operator | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Initialize from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("iws_operator");
-    if (saved) {
-      try {
-        setOperator(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse saved operator");
-      }
-    }
-  }, []);
-
-  const login = async (empId: string): Promise<boolean> => {
+  login: async (empId: string) => {
     const validation = validateEmployeeId(empId);
     if (!validation.valid) {
-      Swal.fire({
-        icon: "warning",
-        title: "Validation Error",
-        text: validation.message,
-        confirmButtonColor: "#2563EB",
-      });
+      toast.error("Validation Error", { description: validation.message });
       return false;
     }
 
-    setIsLoading(true);
+    set({ isLoading: true });
     try {
       const data = await fetchOperatorByEmpId(empId.trim());
       if (data && data.length > 0) {
-        // Find the operator record
         const record = data[0];
-        
-        // Handle IWS Schema P_EMPNAME, fallback to OPERATOR_NAME or generic
         const nameVal = record.P_EMPNAME || record.OPERATOR_NAME || `Operator ${empId.trim()}`;
         
         const newOperator = {
           empId: (record.OPERATOR_CODE as string) || empId.trim(),
           name: String(nameVal),
         };
-        setOperator(newOperator);
+        
+        set({ operator: newOperator });
         localStorage.setItem("iws_operator", JSON.stringify(newOperator));
         
-        Swal.fire({
-          icon: "success",
-          title: "Login Successful",
-          text: `Welcome, ${newOperator.name}`,
-          timer: 1500,
-          showConfirmButton: false,
-        });
+        toast.success(`Welcome, ${newOperator.name}`);
         return true;
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Not Found",
-          text: `Operator code ${empId} not found.`,
-          confirmButtonColor: "#2563EB",
-        });
+        toast.error("Not Found", { description: `Operator code ${empId} not found.` });
         return false;
       }
     } catch (error: any) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.message || "Failed to login.",
-        confirmButtonColor: "#2563EB",
-      });
+      toast.error("Error", { description: error.message || "Failed to login." });
       return false;
     } finally {
-      setIsLoading(false);
+      set({ isLoading: false });
     }
-  };
+  },
 
-  const logout = () => {
-    setOperator(null);
+  logout: () => {
+    set({ operator: null });
     localStorage.removeItem("iws_operator");
-  };
+    toast.info("Logged out successfully");
+  },
 
-  return (
-    <AuthContext.Provider value={{ operator, login, logout, isLoading }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+  initialize: () => {
+    const saved = localStorage.getItem("iws_operator");
+    if (saved) {
+      try {
+        set({ operator: JSON.parse(saved) });
+      } catch (e) {
+        console.error("Failed to parse saved operator");
+      }
+    }
   }
-  return context;
+}));
+
+// Provide a dummy AuthProvider for backward compatibility in layout.tsx
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const initialize = useAuth((state) => state.initialize);
+  
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
+  return <>{children}</>;
 }

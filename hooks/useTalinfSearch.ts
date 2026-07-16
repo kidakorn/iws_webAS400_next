@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
+import { useQueryState } from "nuqs";
 import { TalinfRecord } from "@/types/talinf";
 import { SearchState } from "@/types/api";
 import { validateLotNo } from "@/lib/validators/talinf";
@@ -7,7 +8,7 @@ import { fetchLotByLotNo } from "@/lib/api/talinf";
 import { MOCK_TALINF_DATA } from "@/lib/constants";
 
 export function useTalinfSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useQueryState("q", { defaultValue: "" });
   const [searchState, setSearchState] = useState<SearchState<TalinfRecord>>({
     data: [],
     status: "idle",
@@ -21,16 +22,13 @@ export function useTalinfSearch() {
     const term = typeof overrideTerm === "string" ? overrideTerm : searchTerm;
     setValidationError("");
     
+    if (!term) return;
+
     const validation = validateLotNo(term);
     if (!validation.valid) {
       setValidationError(validation.message);
       setSearchState((prev) => ({ ...prev, status: "error", error: validation.message }));
-      Swal.fire({
-        icon: "error",
-        title: "Validation Error",
-        text: validation.message,
-        confirmButtonColor: "#2563EB",
-      });
+      toast.error("Validation Error", { description: validation.message });
       return;
     }
 
@@ -41,29 +39,21 @@ export function useTalinfSearch() {
       
       if (data.length === 0) {
         setSearchState({ data: [], status: "not-found", error: "Data not found" });
-        Swal.fire({
-          icon: "warning",
-          title: "Not Found",
-          text: `No data found for Lot No: ${term}`,
-          confirmButtonColor: "#2563EB",
-        });
+        toast.warning("Not Found", { description: `No data found for Lot No: ${term}` });
       } else {
         setSearchState({ data, status: "success", error: null });
+        toast.success(`Found ${data.length} records`);
       }
     } catch (err: any) {
       const msg = err.message || "An error occurred";
       setSearchState({ data: [], status: "error", error: msg });
-      Swal.fire({
-        icon: "error",
-        title: "API Error",
-        text: msg,
-        confirmButtonColor: "#2563EB",
-      });
+      toast.error("API Error", { description: msg });
     }
   };
 
   const loadMockData = () => {
     setValidationError("");
+    setSearchTerm("05245-0001-421-001");
     setSearchState({ data: MOCK_TALINF_DATA, status: "success", error: null });
   };
 
