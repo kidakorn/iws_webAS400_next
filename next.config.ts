@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: false,
-  basePath: '/kidakorn',
+  basePath: '/kidakorn/web400',
 };
 
 export default nextConfig;
